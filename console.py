@@ -113,12 +113,21 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def split_args(self, line):
+        """Split arguments"""
+        listarg = []
+        for arg in line.split(" "):
+            listarg.append(arg)
+        return listarg
+
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
         elif args not in HBNBCommand.classes:
+            arguments = self.split_args(args)
+            if arguments[0] not in HBNBCommand.classes
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[args]()
