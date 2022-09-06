@@ -133,6 +133,10 @@ class HBNBCommand(cmd.Cmd):
         for attribute in arguments[1:]:
             key = attribute.split("=")[0]
             value = attribute.split("=")[1]
+            try:
+                value = eval(value)
+            except:
+                pass
             new_instance.__dict__[key] = value
         print(new_instance.id)
         storage.save()
@@ -213,18 +217,18 @@ class HBNBCommand(cmd.Cmd):
         print_list = []
 
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]  # remove possible 0trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
             for k, v in storage._FileStorage__objects.items():
                 if k.split('.')[0] == args:
-                    print_list.append(str(v))
+                    print_list.append(v)
         else:
             for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+                print_list.append(v)
+        
+        print(print_list[0])
 
     def help_all(self):
         """ Help information for the all command """
