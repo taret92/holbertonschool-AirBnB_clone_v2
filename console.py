@@ -112,14 +112,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
-
-    def split_args(self, line):
-        """Split arguments"""
-        listarg = []
-        for arg in line.split(" "):
-            listarg.append(arg)
-        return listarg
-
+    
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
@@ -132,11 +125,12 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[arguments[0]]()
         for attribute in arguments[1:]:
             key = attribute.split("=")[0]
-            value = attribute.split("=")[1]
+            value = attribute.split("=")[1].replace("_", " ").strip('"')
             try:
                 value = eval(value)
             except:
                 pass
+        
             new_instance.__dict__[key] = value
         print(new_instance.id)
         storage.save()
