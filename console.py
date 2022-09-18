@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -112,7 +112,7 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
-    
+
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
@@ -126,14 +126,10 @@ class HBNBCommand(cmd.Cmd):
         for attribute in arguments[1:]:
             key = attribute.split("=")[0]
             value = attribute.split("=")[1].replace("_", " ").strip('"')
-            try:
-                value = eval(value)
-            except:
-                pass
-        
+            value = eval(value)
             new_instance.__dict__[key] = value
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -164,7 +160,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            print(storage.__objects[key])
         except KeyError:
             print("** no instance found **")
 
@@ -196,7 +192,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del(storage._FileStorage__objects.items()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -268,7 +264,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         # determine if key is present
-        if key not in storage.all():
+        if key not in storage._FileStorage__objects.items():
             print("** no instance found **")
             return
 
@@ -302,7 +298,7 @@ class HBNBCommand(cmd.Cmd):
             args = [att_name, att_val]
 
         # retrieve dictionary of current objects
-        new_dict = storage.all()[key]
+        new_dict = storage._FileStorage__objects.items()[key]
 
         # iterate through attr names and values
         for i, att_name in enumerate(args):
@@ -328,6 +324,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
