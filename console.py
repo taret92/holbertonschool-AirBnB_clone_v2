@@ -126,7 +126,10 @@ class HBNBCommand(cmd.Cmd):
         for attribute in arguments[1:]:
             key = attribute.split("=")[0]
             value = attribute.split("=")[1].replace("_", " ").strip('"')
-            value = eval(value)
+            try:
+                value = eval(value)
+            except (NameError, SyntaxError, TypeError, ValueError):
+                pass
             new_instance.__dict__[key] = value
         print(new_instance.id)
         new_instance.save()
