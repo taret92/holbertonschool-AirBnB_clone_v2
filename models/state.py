@@ -8,6 +8,7 @@ import sqlalchemy
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class State(BaseModel, Base):
     """ State class """
     if models.storage_t == "db":
@@ -17,9 +18,10 @@ class State(BaseModel, Base):
     else:
         name = ""
 
+
 def __init__(self, *args, **kwargs):
-        """initializes state"""
-        super().__init__(*args, **kwargs)
+    """initializes state"""
+    super().__init__(*args, **kwargs)
 
     if models.storage_t != "db":
         @property
