@@ -210,18 +210,21 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         print_list = []
         aux = []
-        storage_all = storage.all()
-        for sa in storage_all.keys():
-            aux.append((sa, storage_all[sa]))
-
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            args = args.split(' ')  # remove possible trailing args
+            if len(args) == 0:
+                storage_all = storage.all()
+            elif args[0] in HBNBCommand.classes:
+                storage_all = storage.all(HBNBCommand.classes[args[0]])
+
+            if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
 
+            for sa in storage_all.keys():
+                aux.append((sa, storage_all[sa]))
             for k, v in aux:
-                if k.split('.')[0] == args:
+                if k.split('.')[0] == args[0]:
                     print_list.append(str(v))
         else:
             for k, v in aux:
