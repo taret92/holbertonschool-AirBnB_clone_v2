@@ -6,15 +6,6 @@ from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
 if models.storage_t == "db":
-    class place_amenity(BaseModel, Base):
-        __tablename__ = 'place_amenity'
-        place_id = Column(String(60), ForeignKey('places.id',
-                          onupdate='CASCADE', ondelete='CASCADE'),
-                          primary_key=True)
-        amenity_id = Column(String(60), ForeignKey('amenities.id',
-                            onupdate='CASCADE', ondelete='CASCADE'),
-                            primary_key=True)
-
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),
                                  ForeignKey('places.id', onupdate='CASCADE',
