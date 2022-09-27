@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import models
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -113,6 +114,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+<<<<<<< HEAD
     def split_args(self, line):
         """Split arguments"""
         listarg = []
@@ -120,6 +122,8 @@ class HBNBCommand(cmd.Cmd):
             listarg.append(arg)
         return listarg
 
+=======
+>>>>>>> 507adacc50ab7f2f091199f0018768958e02f9bd
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
@@ -135,11 +139,11 @@ class HBNBCommand(cmd.Cmd):
             value = attribute.split("=")[1]
             try:
                 value = eval(value)
-            except:
+            except (NameError, SyntaxError, TypeError, ValueError):
                 pass
             new_instance.__dict__[key] = value
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -202,7 +206,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del(storage._FileStorage__objects.items()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -215,16 +219,32 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-
+        aux = []
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            args = args.split(' ')  # remove possible trailing args
+            if len(args) == 0:
+                storage_all = storage.all()
+            elif args[0] in HBNBCommand.classes:
+                storage_all = storage.all(HBNBCommand.classes[args[0]])
+
+            if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+<<<<<<< HEAD
             for k, v in storage.all(HBNBCommand.classes[args]).items():
                 print_list.append(str(v))
         else:
             for k, v in storage.all().items():
+=======
+
+            for sa in storage_all.keys():
+                aux.append((sa, storage_all[sa]))
+            for k, v in aux:
+                if k.split('.')[0] == args[0]:
+                    print_list.append(str(v))
+        else:
+            for k, v in aux:
+>>>>>>> 507adacc50ab7f2f091199f0018768958e02f9bd
                 print_list.append(str(v))
 
         print(print_list)
@@ -273,7 +293,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         # determine if key is present
-        if key not in storage.all():
+        if key not in storage._FileStorage__objects.items():
             print("** no instance found **")
             return
 
@@ -307,7 +327,7 @@ class HBNBCommand(cmd.Cmd):
             args = [att_name, att_val]
 
         # retrieve dictionary of current objects
-        new_dict = storage.all()[key]
+        new_dict = storage._FileStorage__objects.items()[key]
 
         # iterate through attr names and values
         for i, att_name in enumerate(args):
@@ -333,6 +353,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

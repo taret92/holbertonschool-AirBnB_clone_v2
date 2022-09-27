@@ -8,16 +8,17 @@ import sqlalchemy
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class State(BaseModel, Base):
     """ State class """
     if models.storage_t == "db":
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state")
+        cities = relationship("City", cascade="all, delete", backref="state")
     else:
         name = ""
 
-def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """initializes state"""
         super().__init__(*args, **kwargs)
 
