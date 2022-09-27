@@ -114,16 +114,6 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-<<<<<<< HEAD
-    def split_args(self, line):
-        """Split arguments"""
-        listarg = []
-        for arg in line.split(" "):
-            listarg.append(arg)
-        return listarg
-
-=======
->>>>>>> 507adacc50ab7f2f091199f0018768958e02f9bd
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
@@ -230,12 +220,6 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-<<<<<<< HEAD
-            for k, v in storage.all(HBNBCommand.classes[args]).items():
-                print_list.append(str(v))
-        else:
-            for k, v in storage.all().items():
-=======
 
             for sa in storage_all.keys():
                 aux.append((sa, storage_all[sa]))
@@ -244,7 +228,6 @@ class HBNBCommand(cmd.Cmd):
                     print_list.append(str(v))
         else:
             for k, v in aux:
->>>>>>> 507adacc50ab7f2f091199f0018768958e02f9bd
                 print_list.append(str(v))
 
         print(print_list)
